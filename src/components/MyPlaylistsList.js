@@ -2,15 +2,15 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import _ from 'lodash';
 import music from '../images/music.jpeg';
-//import { initiateGetTracks } from '../actions/result';
-//import { handleTracks } from '../actions/result';
 
-const MyPlaylistsList = ({ myplaylists}) => {
+const MyPlaylistsList = ({ myplaylists, handleTracks}) => {
   return (
     <React.Fragment>
     {Object.keys(myplaylists).length > 0 && (
         <div className="artists">
           {myplaylists.items.map((playlist, index) => {
+            const tracksLink = playlist.tracks.href;
+            console.log(tracksLink);
             return (
               <React.Fragment key={index}>
                 <Card style={{ width: '18rem' }}>
@@ -37,7 +37,7 @@ const MyPlaylistsList = ({ myplaylists}) => {
                         {playlist.owner.display_name}
                       </small>
                     </Card.Text>
-                    <Card.Link >View Tracks</Card.Link>
+                    <Card.Link onClick={() => handleTracks(tracksLink)}>View Tracks</Card.Link>
                   </Card.Body>
                 </Card>
               </React.Fragment>

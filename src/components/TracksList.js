@@ -1,11 +1,13 @@
 import React from "react";
-//import { Card } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import _ from "lodash";
 import music from "../images/music.jpeg";
+//import { changekey, getIDs } from '../utils/functions';
+import { changekey, } from '../utils/functions';
 
 const TrackList = ({ tracks, trackfeatures }) => {
   console.log(Object.keys(trackfeatures).length);
+  //getIDs(tracks);
   return (
     <React.Fragment>
       {Object.keys(tracks).length > 0 && (
@@ -44,8 +46,8 @@ const TrackList = ({ tracks, trackfeatures }) => {
                         {" "}
                         {track.track.album.artists[0].name}
                       </td>
-                      <td style={{ width: "10vw" }}> {trackf.key}</td>
-                      <td style={{ width: "10vw" }}> {trackf.tempo}</td>
+                      <td style={{ width: "10vw" }}> {changekey(trackf.key)}</td>
+                      <td style={{ width: "10vw" }}> {Math.round(trackf.tempo)}</td>
                       <td style={{ width: "10vw" }}> {trackf.id}</td>
                     </tr>
                   </tbody>

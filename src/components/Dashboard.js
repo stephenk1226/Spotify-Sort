@@ -16,14 +16,14 @@ import {
   initiateGetTracksFeatures,
 } from "../actions/result";
 import Loader from "./Loader";
+import { getIDs } from "../utils/functions";
 
 const Dashboard = (props) => {
+  //var id = "4RKrdQnH1Sgpp3NUTzYvTA";
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("albums");
   const { isValidSession, history } = props;
   props.dispatch(initiateGetPlaylists());
-  props.dispatch(initiateGetTracks());
-  props.dispatch(initiateGetTracksFeatures("4JpKVNYnVcJ8tuMKjAj50A,4vyLcnuVAwrLOf46w5FrjB"))
   const handleSearch = (searchTerm) => {
     if (isValidSession()) {
       setIsLoading(true);
@@ -41,12 +41,30 @@ const Dashboard = (props) => {
     }
   };
 
-   /*const handleTracks = () => {
+  const handleTracks = async (url) => {
     if (isValidSession()) {
       setIsLoading(true);
-      props.dispatch(initiateGetTracks()).then(() => {
+      props.dispatch(initiateGetTracks(url)).then(() => {
         setIsLoading(false);
       });
+      const { tracks } = props;
+      const ids = getIDs(tracks);
+      alert(ids);
+      if (ids !== undefined) {
+        props.dispatch(initiateGetTracksFeatures(ids)).then(() => {
+          setIsLoading(false);
+        });
+      } else {
+        props
+          .dispatch(
+            initiateGetTracksFeatures(
+              "4JpKVNYnVcJ8tuMKjAj50A,4vyLcnuVAwrLOf46w5FrjB"
+            )
+          )
+          .then(() => {
+            setIsLoading(false);
+          });
+      }
     } else {
       history.push({
         pathname: "/",
@@ -55,9 +73,7 @@ const Dashboard = (props) => {
         },
       });
     }
-  }; */
-
- 
+  };
 
   const loadMore = async (type) => {
     if (isValidSession()) {
@@ -90,8 +106,22 @@ const Dashboard = (props) => {
     setSelectedCategory(category);
   };
 
-  const { albums, artists, playlist, myplaylists, tracks, trackfeatures } = props;
-  const result = { albums, artists, playlist, myplaylists, tracks, trackfeatures };
+  const {
+    albums,
+    artists,
+    playlist,
+    myplaylists,
+    tracks,
+    trackfeatures,
+  } = props;
+  const result = {
+    albums,
+    artists,
+    playlist,
+    myplaylists,
+    tracks,
+    trackfeatures,
+  };
   console.log(result);
 
   return (
@@ -99,11 +129,16 @@ const Dashboard = (props) => {
       {isValidSession() ? (
         <div>
           <Navbar className="color-nav" variant="dark">
-            <Navbar.Brand  href="/dashboard"  style = {{fontSize:'2.2rem', fontWeight:'bold', color:'white'}}>Spotify Sorter</Navbar.Brand>
+            <Navbar.Brand
+              href="/dashboard"
+              style={{ fontSize: "2.2rem", fontWeight: "bold", color: "white" }}
+            >
+              Spotify Sorter
+            </Navbar.Brand>
             <Nav className="mr-auto"></Nav>
             <SearchForm handleSearch={handleSearch} />
           </Navbar>
-          
+
           <Loader show={isLoading}>Loading...</Loader>
           <SearchResult
             result={result}
@@ -113,9 +148,7 @@ const Dashboard = (props) => {
             isValidSession={isValidSession}
           />
           <h2 className="main-heading">My Playlists</h2>
-          <PlaylistResult 
-          result={result}
-          />
+          <PlaylistResult result={result} handleTracks={handleTracks} />
           <h2 className="main-heading"> Your Tracks</h2>
           <TrackResult result={result} />
         </div>
@@ -140,7 +173,7 @@ const mapStateToProps = (state) => {
     playlist: state.playlist,
     myplaylists: state.myplaylists,
     tracks: state.tracks,
-    trackfeatures:state.trackfeatures,
+    trackfeatures: state.trackfeatures,
   };
 };
 

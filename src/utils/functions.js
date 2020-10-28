@@ -21,3 +21,28 @@ export const setAuthHeader = () => {
     console.log('Error setting auth', error);
   }
 };
+
+export function getIDs(tracks){
+  if(tracks.items !== undefined){
+    const ids = tracks.items.map((track) => track.track.id);
+    var result = ids.join(",");
+    return result;
+  }
+}
+
+export function changekey(key){
+  switch(key){
+    case 0:
+      return"C";
+    case 1:
+      return"C#";
+    case 2:
+      return"D";    
+
+
+    case 7:
+      return "seven";  
+    default:
+      return "No Key Found"  
+  }
+}

@@ -70,6 +70,7 @@ import {
       }
     };
   };
+  
   export const initiateGetPlaylists = (url) => {
     return async (dispatch) => {
       try {
@@ -83,11 +84,11 @@ import {
     };
   };
 
-  export const initiateGetTracks = (url) => {
+  export const initiateGetTracks = (ids) => {
     return async (dispatch) => {
       try {
-        const API_URL = 'https://api.spotify.com/v1/playlists/4RKrdQnH1Sgpp3NUTzYvTA/tracks'
-        const result = await get(API_URL);     
+        const API_URL = ids;
+        const result = await get(API_URL);
         dispatch(setTracks(result));
         return ;
       } catch (error) {
