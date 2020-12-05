@@ -37,7 +37,7 @@ export function mergeArrays(tracks, trackf){
   }
   else{
     for(var i = 0; i<tracks.length; i++ ){
-      let track = {id: trackf[i].id, name: tracks[i].track.name, url:tracks[i].track.external_urls.spotify, image:tracks[i].track.album.images[0].url, artist:tracks[i].track.album.artists[0].name, danceability:trackf[i].danceability, energy:trackf[i].energy, key:trackf[i].key, tempo:trackf[i].tempo }
+      let track = {id: trackf[i].id, name: tracks[i].track.name, url:tracks[i].track.external_urls.spotify, image:tracks[i].track.album.images[0].url, artist:tracks[i].track.album.artists[0].name, artistId:tracks[i].track.artists[0].id, danceability:trackf[i].danceability, energy:trackf[i].energy, key:trackf[i].key, tempo:trackf[i].tempo }
       resultArray.push(track);
     }
   }

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import SearchResult from "./SearchResult";
 import PlaylistResult from "./PlaylistResult";
+import RecommendResult from "./RecommendResult";
 import TrackResult from "./TrackResult";
 import { Navbar, Nav } from "react-bootstrap";
 import SearchForm from "./SearchForm";
@@ -68,15 +69,23 @@ const Dashboard = (props) => {
     if (isValidSession()) {
       setIsLoading(true);
       await props.dispatch(initiateGetTracks(url))
-      const seed_track = "0c6xIDDpzE81m2q797ordA";
-      const seed_artist = "4NHQUGzhtTLFvgF5SZesLK"
-      const key = "6"
-      const tempo = "126"
-      const energy = "0.8"
-      const dance = "0.7"
+      setIsLoading(false);
+      
+    } else {
+      history.push({
+        pathname: "/",
+        state: {
+          session_expired: true,
+        },
+      });
+    }
+  };
 
-      const recommendations = await props.dispatch(getRecommendations(seed_track, seed_artist, tempo, key, energy, dance))
-      console.log("Recommendations", recommendations);
+
+  const handleRecommendations =  async (seed_track, seed_artist, key, tempo, energy, dance) => {
+    if (isValidSession()) {
+      setIsLoading(true);
+      await props.dispatch(getRecommendations(seed_track, seed_artist, key, tempo, energy, dance))
       setIsLoading(false);
       
     } else {
@@ -132,7 +141,7 @@ const Dashboard = (props) => {
               href="/dashboard"
               style={{ fontSize: "2.2rem", fontWeight: "bold", color: "white" }}
             >
-              Spotify Sorter
+              Sortify
             </Navbar.Brand>
             <Nav className="mr-auto"></Nav>
             <SearchForm handleSearch={handleSearch} />
@@ -149,7 +158,11 @@ const Dashboard = (props) => {
           <PlaylistResult result={result} handleTracks={handleTracks} />
           <h2 className="main-heading"> Your Tracks</h2>
           { _.isEmpty(tracks) ? '' :
-            <TrackResult result={result} />
+            <TrackResult result={result} handleRecommendations={handleRecommendations}/>
+          }
+          <h2 className="main-heading"> Recommendations</h2>
+          { _.isEmpty(trackfeatures) ? '' :
+            <RecommendResult result={result} />
           }
         </div>
       ) : (

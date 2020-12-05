@@ -92,6 +92,7 @@ export const initiateGetTracks = (ids) => {
       const tracksIds = getIDs(result.items);
       const trackf = await dispatch(initiateGetTracksFeatures(tracksIds));
       const tracks = result.items;
+      console.log("TRACKS", tracks);
       const mergedTracks = mergeArrays(tracks, trackf);
       return dispatch(setTracks(mergedTracks));
     } catch (error) {
@@ -136,9 +137,9 @@ export const getRecommendations = (
       )}&target_key=${encodeURIComponent(key)}&target_tempo=${encodeURIComponent(
         tempo
       )}`;
+      console.log("url", API_URL);
       const result = await get(API_URL);
-      console.log(result);
-      return result;
+      return dispatch(setTracksFeatures(result.tracks));
     } catch (error) {
       console.log("error", error);
     }
