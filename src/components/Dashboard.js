@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import SearchResult from "./SearchResult";
 import PlaylistResult from "./PlaylistResult";
@@ -13,17 +13,20 @@ import {
   initiateLoadMorePlaylist,
   initiateLoadMoreArtists,
   initiateGetTracks,
-  initiateGetTracksFeatures,
+  getRecommendations
 } from "../actions/result";
 import Loader from "./Loader";
-import { getIDs } from "../utils/functions";
+import _ from 'lodash';
 
 const Dashboard = (props) => {
-  //var id = "4RKrdQnH1Sgpp3NUTzYvTA";
+
+  useEffect(()=>{
+    props.dispatch(initiateGetPlaylists());
+  },[props.tracks]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("albums");
   const { isValidSession, history } = props;
-  props.dispatch(initiateGetPlaylists());
   const handleSearch = (searchTerm) => {
     if (isValidSession()) {
       setIsLoading(true);
@@ -41,30 +44,41 @@ const Dashboard = (props) => {
     }
   };
 
-  const handleTracks = async (url) => {
+
+
+  const {
+    albums,
+    artists,
+    playlist,
+    myplaylists,
+    tracks,
+    trackfeatures,
+  } = props;
+  const result = {
+    albums,
+    artists,
+    playlist,
+    myplaylists,
+    tracks,
+    trackfeatures,
+  };
+  console.log(result);
+
+  const handleTracks =  async (url) => {
     if (isValidSession()) {
       setIsLoading(true);
-      props.dispatch(initiateGetTracks(url)).then(() => {
-        setIsLoading(false);
-      });
-      const { tracks } = props;
-      const ids = getIDs(tracks);
-      alert(ids);
-      if (ids !== undefined) {
-        props.dispatch(initiateGetTracksFeatures(ids)).then(() => {
-          setIsLoading(false);
-        });
-      } else {
-        props
-          .dispatch(
-            initiateGetTracksFeatures(
-              "4JpKVNYnVcJ8tuMKjAj50A,4vyLcnuVAwrLOf46w5FrjB"
-            )
-          )
-          .then(() => {
-            setIsLoading(false);
-          });
-      }
+      await props.dispatch(initiateGetTracks(url))
+      const seed_track = "0c6xIDDpzE81m2q797ordA";
+      const seed_artist = "4NHQUGzhtTLFvgF5SZesLK"
+      const key = "6"
+      const tempo = "126"
+      const energy = "0.8"
+      const dance = "0.7"
+
+      const recommendations = await props.dispatch(getRecommendations(seed_track, seed_artist, tempo, key, energy, dance))
+      console.log("Recommendations", recommendations);
+      setIsLoading(false);
+      
     } else {
       history.push({
         pathname: "/",
@@ -74,6 +88,7 @@ const Dashboard = (props) => {
       });
     }
   };
+
 
   const loadMore = async (type) => {
     if (isValidSession()) {
@@ -106,23 +121,7 @@ const Dashboard = (props) => {
     setSelectedCategory(category);
   };
 
-  const {
-    albums,
-    artists,
-    playlist,
-    myplaylists,
-    tracks,
-    trackfeatures,
-  } = props;
-  const result = {
-    albums,
-    artists,
-    playlist,
-    myplaylists,
-    tracks,
-    trackfeatures,
-  };
-  console.log(result);
+ 
 
   return (
     <React.Fragment>
@@ -138,7 +137,6 @@ const Dashboard = (props) => {
             <Nav className="mr-auto"></Nav>
             <SearchForm handleSearch={handleSearch} />
           </Navbar>
-
           <Loader show={isLoading}>Loading...</Loader>
           <SearchResult
             result={result}
@@ -150,7 +148,9 @@ const Dashboard = (props) => {
           <h2 className="main-heading">My Playlists</h2>
           <PlaylistResult result={result} handleTracks={handleTracks} />
           <h2 className="main-heading"> Your Tracks</h2>
-          <TrackResult result={result} />
+          { _.isEmpty(tracks) ? '' :
+            <TrackResult result={result} />
+          }
         </div>
       ) : (
         <Redirect

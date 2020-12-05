@@ -5,15 +5,13 @@ import music from "../images/music.jpeg";
 //import { changekey, getIDs } from '../utils/functions';
 import { changekey, } from '../utils/functions';
 
-const TrackList = ({ tracks, trackfeatures }) => {
-  console.log(Object.keys(trackfeatures).length);
-  //getIDs(tracks);
+const TrackList = ({ tracks }) => {
   return (
     <React.Fragment>
       {Object.keys(tracks).length > 0 && (
         <div className="artists">
-          {tracks.items.map((track, index) => {
-            return trackfeatures.audio_features.map((trackf) => (
+          {tracks.map((track, index) => {
+            return(
               <React.Fragment key={index}>
                 <Table responsive striped bordered hover variant="dark">
                   <tbody>
@@ -21,7 +19,7 @@ const TrackList = ({ tracks, trackfeatures }) => {
                       <td style={{ width: "100px", height: "100px" }}>
                         <a
                           target="_blank"
-                          href={track.track.external_urls.spotify}
+                          href={track.url}
                           rel="noopener noreferrer"
                           className="card-image-link"
                         >
@@ -29,7 +27,7 @@ const TrackList = ({ tracks, trackfeatures }) => {
                             <img
                               style={{ width: "100px", height: "100px" }}
                               variant="top"
-                              src={track.track.album.images[0].url}
+                              src={track.image}
                               alt=""
                             />
                           ) : (
@@ -41,19 +39,20 @@ const TrackList = ({ tracks, trackfeatures }) => {
                           )}
                         </a>
                       </td>
-                      <td style={{ width: "60vw" }}>{track.track.name}</td>
+                      <td style={{ width: "60vw" }}>{track.name}</td>
                       <td style={{ width: "40vw" }}>
                         {" "}
-                        {track.track.album.artists[0].name}
+                        {track.artist}
                       </td>
-                      <td style={{ width: "10vw" }}> {changekey(trackf.key)}</td>
-                      <td style={{ width: "10vw" }}> {Math.round(trackf.tempo)}</td>
-                      <td style={{ width: "10vw" }}> {trackf.id}</td>
+                      <td style={{ width: "10vw" }}> {changekey(track.key)}</td>
+                      <td style={{ width: "10vw" }}> {Math.round(track.tempo)}</td>
+                      <td style={{ width: "10vw" }}> {Math.round(track.energy*10)}</td>
+                      <td style={{ width: "10vw" }}> {track.danceability}</td>
                     </tr>
                   </tbody>
                 </Table>
               </React.Fragment>
-            ));
+            );
         })}
 
         </div>

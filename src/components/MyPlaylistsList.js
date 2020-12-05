@@ -10,7 +10,6 @@ const MyPlaylistsList = ({ myplaylists, handleTracks}) => {
         <div className="artists">
           {myplaylists.items.map((playlist, index) => {
             const tracksLink = playlist.tracks.href;
-            console.log(tracksLink);
             return (
               <React.Fragment key={index}>
                 <Card style={{ width: '18rem' }}>
