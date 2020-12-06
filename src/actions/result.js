@@ -11,7 +11,7 @@ import {
   SET_TRACKS_FEATURES,
 } from "../utils/constants";
 import { get } from "../utils/api";
-import { getIDs, mergeArrays } from "../utils/functions";
+import { getIDs, mergeArrays, mergeRecommendedArrays } from "../utils/functions";
 export const setAlbums = (albums) => ({
   type: SET_ALBUMS,
   albums,
@@ -89,7 +89,7 @@ export const initiateGetTracks = (ids) => {
     try {
       const API_URL = ids;
       const result = await get(API_URL);
-      const tracksIds = getIDs(result.items);
+      const tracksIds = getIDs(result.items, "T");
       const trackf = await dispatch(initiateGetTracksFeatures(tracksIds));
       const tracks = result.items;
       console.log("TRACKS", tracks);
@@ -139,7 +139,12 @@ export const getRecommendations = (
       )}`;
       console.log("url", API_URL);
       const result = await get(API_URL);
-      return dispatch(setTracksFeatures(result.tracks));
+      const tracksIds = getIDs(result.tracks, "R");
+      const trackf = await dispatch(initiateGetTracksFeatures(tracksIds));
+      const tracks = result.tracks;
+      const mergedTracks = mergeRecommendedArrays(tracks, trackf);
+      console.log("merged",mergedTracks);
+      return dispatch(setTracksFeatures(mergedTracks));
     } catch (error) {
       console.log("error", error);
     }

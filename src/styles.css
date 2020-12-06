@@ -142,7 +142,8 @@ body {
 
 .albums,
 .artists,
-.playlist {
+.playlist,
+.tracks {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -178,6 +179,36 @@ body {
 .color-nav{
   background-color: #242a2e;
 }
+
+.table th{
+  font-size: 0.7em;
+}
+
+.table td{
+  font-size: 0.8em;
+}
+
+.table img{
+  width: 40px;
+  height: 40px;
+}
+
+.table thead th {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  background:#343a40;
+  z-index: 10;
+}
+
+#sticky{
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  background:#343a40;
+  z-index: 10;
+}
+
 
 @media screen and (max-width: 400px) {
   .search-buttons {

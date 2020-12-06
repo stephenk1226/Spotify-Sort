@@ -156,11 +156,9 @@ const Dashboard = (props) => {
           />
           <h2 className="main-heading">My Playlists</h2>
           <PlaylistResult result={result} handleTracks={handleTracks} />
-          <h2 className="main-heading"> Your Tracks</h2>
           { _.isEmpty(tracks) ? '' :
             <TrackResult result={result} handleRecommendations={handleRecommendations}/>
           }
-          <h2 className="main-heading"> Recommendations</h2>
           { _.isEmpty(trackfeatures) ? '' :
             <RecommendResult result={result} />
           }
