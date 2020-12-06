@@ -36,14 +36,12 @@ const TrackList = ({ tracks, handleRecommendations }) => {
                     >
                       {!_.isEmpty(track) ? (
                         <img
-                          //style={{ width: "20px", height: "20px" }}
                           variant="top"
                           src={track.image}
                           alt=""
                         />
                       ) : (
                         <img
-                          // style={{ width: "20px", height: "20px" }}
                           src={music}
                           alt=""
                         />

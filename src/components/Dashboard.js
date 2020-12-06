@@ -45,8 +45,6 @@ const Dashboard = (props) => {
     }
   };
 
-
-
   const {
     albums,
     artists,
@@ -63,7 +61,6 @@ const Dashboard = (props) => {
     tracks,
     trackfeatures,
   };
-  console.log(result);
 
   const handleTracks =  async (url) => {
     if (isValidSession()) {

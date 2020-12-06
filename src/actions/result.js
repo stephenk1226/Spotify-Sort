@@ -108,7 +108,6 @@ export const initiateGetTracksFeatures = (ids) => {
         ids
       )}`;
       const result = await get(API_URL);
-      console.log(result);
       return result.audio_features;
     } catch (error) {
       console.log("error", error);
@@ -143,7 +142,6 @@ export const getRecommendations = (
       const trackf = await dispatch(initiateGetTracksFeatures(tracksIds));
       const tracks = result.tracks;
       const mergedTracks = mergeRecommendedArrays(tracks, trackf);
-      console.log("merged",mergedTracks);
       return dispatch(setTracksFeatures(mergedTracks));
     } catch (error) {
       console.log("error", error);
